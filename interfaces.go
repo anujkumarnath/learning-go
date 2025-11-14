@@ -47,8 +47,17 @@ func measure(g geometry) {
 }
 
 func detectCircle(g geometry) {
+	// type assestion
 	if c, ok := g.(circle); ok {
 		fmt.Println("circle with radius", c.radius)
+	}
+
+	// vs type switch
+	switch g.(type) {
+		case circle:
+			fmt.Println("the type of the interface is circle")
+		case rect:
+			fmt.Println("the type of the interface is rect")
 	}
 }
 
