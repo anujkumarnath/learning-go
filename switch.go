@@ -18,6 +18,9 @@ func main() {
 			fmt.Println("three")
 	}
 
+	// notice there is no break statement in swith
+	// go switches break automatically after first match
+	// to allow mulitiple matches need to add comma seaparated cases
 	switch time.Now().Weekday() {
 	case time.Saturday, time.Sunday:
 		fmt.Println("It's the weekend")
