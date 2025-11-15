@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"iter"
+	"slices"
 )
 
 type List[T any] struct {
@@ -24,6 +25,8 @@ func (list *List[T]) Push(v T) {
 	}
 }
 
+// can iterate over a generic type with range by
+// implementing an iterator of type iter.Seq
 func (list *List[T]) All() iter.Seq[T] {
 	return func (yield func(T) bool) {
 		for e := list.head; e != nil; e = e.next {
@@ -35,7 +38,8 @@ func (list *List[T]) All() iter.Seq[T] {
 }
 
 /* EXPLANATION:
-// go iterators are just syntactic sugar, unlike JS, Java, Python
+// NOTE: go iterators are just syntactic sugar, unlike JS, Java, Python
+// iterators in go are functions with special signature
 // thery are only based on compiler generated yield callbacks
 // All() returns this function
 var it = func (yield func(T) bool) {
@@ -58,6 +62,7 @@ var yield = func(val int) bool {
 // calling the yield with e.val inside the loop
 // since it returns true everytime, the entire linked-list is traversed
 it(yield)
+*/
 
 func genFib() iter.Seq[int] {
 	return func(yield func(int) bool) {
@@ -70,7 +75,6 @@ func genFib() iter.Seq[int] {
 		}
 	}
 }
-*/
 
 func main() {
 	lst := List[int]{}
@@ -81,4 +85,30 @@ func main() {
 	for e := range lst.All() {
 		fmt.Println(e)
 	}
+
+	// slices.Collect method takes an iterator and
+	// collects all its value into a slice and rerturns it
+	all := slices.Collect(lst.All())
+	fmt.Println(all)
+
+	// once the range loop hits break or returns early,
+	// the yield function returns false
+	for n := range genFib() {
+		if n >= 10 {
+			break
+		}
+		fmt.Println(n)
+	}
+
+	/*
+	// for earyly break or return,
+	// the compiler creates a return statemnt in the yield function
+	yield := func(n int) bool {
+		if n >= 10 {
+			return false // compiler uses yield's return value to implement break
+		}
+		fmt.Println(n)
+		return true
+	}
+	*/
 }
