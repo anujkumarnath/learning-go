@@ -35,6 +35,8 @@ func (list *List[T]) All() iter.Seq[T] {
 }
 
 /* EXPLANATION:
+// go iterators are just syntactic sugar, unlike JS, Java, Python
+// thery are only based on compiler generated yield callbacks
 // All() returns this function
 var it = func (yield func(T) bool) {
 	for e := list.head; e != nil; e = e.next {
