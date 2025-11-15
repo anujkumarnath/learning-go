@@ -26,11 +26,12 @@ func main() {
 	_, err := f(42)
 	fmt.Println(err)
 	var ae *argsError
-	// errors.As is a more advanced version of errors.Is
-	// It check that a given error (or any error in its chain)
-	// matches a specific error type and converts to a value of that type, returning true
-	// If there's no match it returns false
-	// errors.As updates the ae pointer to point to the argsError struct
+	// err is an interface; it may hold a wrapped error, a *argsError, or anything else.
+	// errors.As walks the error chain and looks for a value assignable to *argsError.
+	// When it finds one, it does `ae = (pointer to that concrete argsError value)`
+	// and returns true; otherwise it returns false. It simply extracts the underlying
+	// concrete value and writes it into ae.
+
 	if errors.As(err, &ae) {
 		fmt.Println(ae.arg)
 		fmt.Println(ae.message)
