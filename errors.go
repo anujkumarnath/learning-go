@@ -41,7 +41,7 @@ func main() {
 
 	for i := range 5 {
 		if err := makeTea(i); err != nil {
-			// errors.Is checks if a given error matches a specific value
+			// errors.Is checks if a given error(or any in its chain) matches a specific error value
 			if errors.Is(err, ErrOutOfTea) {
 				fmt.Println(i, ": we should buy more tea", err)
 			} else if errors.Is(err, ErrPower) {
