@@ -19,8 +19,8 @@ func main() {
 	jobs := make(chan int, numJobs)
 	results := make(chan int, numJobs)
 
-	// creating 5 worker goroutines
-	for w := 1; w <= numJobs; w++ {
+	// creating 2 worker goroutines
+	for w := 1; w <= 2; w++ {
 		go worker(w, jobs, results)
 	}
 
