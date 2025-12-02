@@ -32,7 +32,7 @@ func main() {
 	// indicating we are done producing jobs
 	close(jobs)
 
-	for a := 1; a < numJobs; a++ {
+	for a := 1; a <= numJobs; a++ {
 		<-results
 	}
 }
