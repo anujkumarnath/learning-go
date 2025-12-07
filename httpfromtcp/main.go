@@ -4,27 +4,32 @@ import (
 	"fmt"
 	"os"
 	"io"
+	"log"
+	"errors"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+const inputFilePath = "messages.txt"
 
 func main() {
-	file, err := os.Open("./messages.txt")
-	check(err)
+	file, err := os.Open(inputFilePath)
 
-	buffer := make([]byte, 8)
+	if err != nil {
+		log.Fatal("could not open %s: %s", inputFilePath, err)
+	}
+
+	defer file.Close()
 
 	for {
+		buffer := make([]byte, 8)
 		readBytes, err := file.Read(buffer)
-		if err == io.EOF {
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			fmt.Printf("errors: %s\n", err.Error())
 			break
-		} else {
-			check(err)
 		}
-		fmt.Printf("read: %s\n", buffer[:readBytes])
+
+		fmt.Printf("read: %s\n", string(buffer[:readBytes]))
 	}
 }
